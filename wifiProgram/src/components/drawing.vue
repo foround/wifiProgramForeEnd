@@ -1,23 +1,17 @@
 <template>
     <div>
-        <div class="canvasWrapper">
-            <canvas ref="myZrender" class = 'myZrender' :width="canvasWidth" :height="canvasHeight" v-on:mousewheel="scrollFn"></canvas>
-        </div>
         <section>
-            <el-alert title="还未上传任何图片，不能改变图片尺寸" v-bind:class="{'hide-el-alert':!illegalChangeScale}" type="error"></el-alert>
             <el-button type="primary" v-on:click="triggerUpload">{{uploadText}}</el-button>
             <input type="file" v-on:change="showUploadMsg" ref="uploadElem"/>
-            <div>
-                <span class="demonstration">改变画布比例</span>
-                <el-slider
-                v-model="scale"
-                :step="1"
-                :min=1
-                :max=10
-                v-on:change='changeMapScale'>
-                </el-slider>
-            </div>
+            <el-button-group>
+                <el-button type="success" icon="el-icon-plus" v-on:click="changeCanvasScale(true)"></el-button>
+                <el-button type="warning" icon="el-icon-minus" v-on:click="changeCanvasScale(false)"></el-button>
+            </el-button-group>
+            <span class="demonstration">改变画布比例</span>
         </section>
+        <div class="canvasWrapper">
+            <canvas ref="myZrender" class='myZrender' :width="canvasWidth" :height="canvasHeight" v-on:click="handlePoint"></canvas>
+        </div>
     </div>
 </template>
 <script>
@@ -32,9 +26,9 @@
                 zr: null,
                 canvasWidth: 600,
                 canvasHeight: 400,
-                scale:2,
+                scale: 2,
                 isUploadedImage: false,
-                illegalChangeScale: false,
+                illegalChangeScale: true,
                 uploadText:"上传图片"
             }
         },
@@ -42,15 +36,6 @@
             this.initZRender()
         },
         watch:{
-            scale:{
-                handler(oldValue,newValue) {
-                    if(this.isUploadedImage == false){
-                        this.illegalChangeScale = true
-                    }else{
-                        this.renderCanvasMapImage()
-                    }
-                }
-            },
             isUploadedImage:function (newValue,oldValue) {
                 if(newValue == true){
                     this.illegalChangeScale = false
@@ -62,22 +47,6 @@
             initZRender(){
                 const zr = zrender.init(this.$refs.myZrender)
                 this.zr = zr
-            },
-            //鼠标在画布上发生滚动触发的事件
-            scrollFn(e){
-                //if(this.isUploadedImage){
-                let isUpDirection = e.deltaY< 0? true: false;
-                let scale = this.scale
-                if(isUpDirection){
-                    scale++;
-                }else{
-                    scale--;
-                }
-                if(scale > MAX_SCALE)
-                    scale = MAX_SCALE
-                if(scale < MIN_SCALE)
-                    scale = MIN_SCALE
-                this.scale = scale
             },
             triggerUpload(){
                 console.log('触发图片上传')
@@ -108,7 +77,6 @@
                     }
                 }catch(e){
                     console.log('上传图片出错');
-                    console.log(e)
                 }
             },
             //渲染canvas背景
@@ -133,6 +101,29 @@
                 })
                 zr.add(mapImage)
             },
+            // 改变图片大小
+            changeCanvasScale(isAddScale) {
+                let scale = this.scale
+                let illegalChangeScale = this.illegalChangeScale
+                if(!illegalChangeScale){
+                    if(isAddScale == true && scale > MIN_SCALE){
+                        scale--
+                    }else{
+                        if(isAddScale == false && scale < MAX_SCALE){
+                            scale++
+                        }
+                    }
+                    this.scale = scale
+                    this.renderCanvasMapImage()
+                }else{
+                    console.log('非法改变图片大小')
+                }
+
+            },
+            //标记点进行操作
+            handlePoint(e){
+                console.log(e)
+            },
             generateACircle(){
                 let zr = this.zr
                 let circle = new zrender.Circle({
@@ -148,44 +139,42 @@
                 })
                 zr.add(circle)
 
-            },
-            //改变画布比例的函数
-            changeMapScale() {
-                console.log("滑杆改变比例")
             }
         }
     }
 </script>
 
 <style scoped>
-    .myZrender{
-        background-color: rgba(0, 0, 0, 0.5);
-        margin-left: 100px;
-        margin-top: 200px;
-        border: 1px solid #fff;
-    }
     .canvasWrapper{
         width: 100%;
-        max-height: 800px;
+        height: 800px;
         overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+        position: relative;
+    }
+    .myZrender{
+        border: 1px solid #fff;
+        position: absolute;
+        left: 0;
+        top: 0;
     }
     input[type = 'file']{
         display: none;
     }
     section{
-        width: 600px;
+        width: 100%;
         position: relative;
         left: 50%;
         transform: translateX(-50%);
+        text-align: left;
+    }
+    .button-group{
+        margin-top: 50px;
+        margin-bottom: 50px;
+        text-align: left;
     }
     .demonstration{
         color: white;
         font-size: 18px;
-    }
-    .el-slider{
-        width: 600px;
-    }
-    .hide-el-alert{
-        display: none;
     }
 </style>
