@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <el-container>
-            <el-aside width='300px'>
+            <el-aside width='200px'>
                 <LeftBanner></LeftBanner>
             </el-aside>
             <el-main>
