@@ -12,5 +12,8 @@
     "echarts": "^4.1.0",
     "element-ui": "^2.3.7",
     "zrender": "^4.0.4"
+  },
+  "devDependencies": {
+    "url-loader": "^1.0.1"
   }
 }

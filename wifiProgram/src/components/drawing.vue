@@ -1,6 +1,6 @@
 <template>
     <div>
-        <section>
+        <section class="scaleChangeArea">
             <el-button type="primary" v-on:click="triggerUpload">{{uploadText}}</el-button>
             <input type="file" v-on:change="showUploadMsg" ref="uploadElem"/>
             <el-button-group>
@@ -12,12 +12,21 @@
         <div class="canvasWrapper">
             <canvas ref="myZrender" class='myZrender' :width="canvasWidth" :height="canvasHeight" v-on:click="handlePoint"></canvas>
         </div>
+        <section class="markerWrapper">
+            <el-button type="primary">增加标记</el-button>
+            <el-button type="success">删除标记</el-button>
+        </section>
     </div>
 </template>
 <script>
     import zrender from 'zrender'
     const MAX_SCALE = 10
     const MIN_SCALE = 1
+    const DEFAULT = 0
+    const ADD_MARKER = 1
+    const REMOVE_MARKER = 2
+    const MARKER_SIZE = 30
+    const MARKER_IMAGE = require('@/assets/images/marker.png')
     export default {
         name: 'drawing',
         data(){
@@ -29,7 +38,8 @@
                 scale: 2,
                 isUploadedImage: false,
                 illegalChangeScale: true,
-                uploadText:"上传图片"
+                uploadText:"上传图片",
+                canvasMode: DEFAULT
             }
         },
         mounted(){
@@ -70,6 +80,7 @@
                         image.src = imageData
                         image.onload = function(){
                             $this.image = image
+                            console.log(image);
                             $this.isUploadedImage = true
                             //将上传的背景图渲染到canvas上
                             $this.renderCanvasMapImage()
@@ -97,7 +108,8 @@
                         "y": 0,
                         "width": displayWidth,
                         "height:": displayHeight
-                    }
+                    },
+                    
                 })
                 zr.add(mapImage)
             },
@@ -122,7 +134,25 @@
             },
             //标记点进行操作
             handlePoint(e){
-                console.log(e)
+                let offsetX = e.offsetX
+                let offsetY = e.offsetY
+                let scale = this.scale
+                let markX = offsetX * scale
+                let markY = offsetY * scale
+                console.log(markX,markY)
+                //增加标记
+                let markerImage = new zrender.Image({
+                    style:{
+                        "image": "/static/img/marker.881b1ef.png",
+                        "x": offsetX,
+                        "y": offsetY - MARKER_SIZE,
+                        "width": MARKER_SIZE,
+                        "height:": MARKER_SIZE
+                    },
+                    z:1
+                })
+                console.log(markerImage)
+                this.zr.add(markerImage)
             },
             generateACircle(){
                 let zr = this.zr
@@ -168,6 +198,9 @@
         transform: translateX(-50%);
         text-align: left;
     }
+    .scaleChangeArea{
+        margin-bottom: 20px;
+    }
     .button-group{
         margin-top: 50px;
         margin-bottom: 50px;
@@ -176,5 +209,8 @@
     .demonstration{
         color: white;
         font-size: 18px;
+    }
+    .markerWrapper{
+        margin-top: 20px;
     }
 </style>
