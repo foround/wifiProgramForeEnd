@@ -8,8 +8,6 @@
                 <el-button type="success" icon="el-icon-plus" v-on:click="changeCanvasScale(true)"></el-button>
                 <el-button type="warning" icon="el-icon-minus" v-on:click="changeCanvasScale(false)"></el-button>
             </el-button-group>
-            <span class="demonstration">请输入平面图宽度：</span>
-						<el-input v-model="mapActuWidth" placeholder="请输入平面图宽度"></el-input>
         </section>
         <div class="canvasWrapper">
             <canvas ref="myZrender" class='myZrender' :width="canvasWidth" :height="canvasHeight" v-on:click="handlePoint"></canvas>
@@ -17,6 +15,9 @@
         <section class="markerWrapper">
             <el-button type="primary" @click='addMarker'>增加标记</el-button>
             <el-button type="success" @click='removeMarker'>删除标记</el-button>
+            <span class="demonstration">请输入平面图宽度：</span>
+						<el-input v-model="mapWidthInput" placeholder="请输入平面图宽度"></el-input>
+            <el-button type="success" @click='getMapWidth'>确定</el-button>
         </section>
 
         <!-- <el-dialog title="输入平面图的长宽" :visible="dialogFormVisible" :close="closeDialogue()">
@@ -61,6 +62,7 @@ export default {
       mapActuHeight: null,
 			errMsg: "",
 			isFormValid: true,
+			mapWidthInput:""
     };
   },
   mounted() {
@@ -305,7 +307,20 @@ export default {
         this.zr.remove(item.markerImage);
       }
       this.markerList = [];
-    }
+		},
+		//得到地图宽度
+		getMapWidth(){
+			if(this.isUploadedImage){
+				if(Number.isNaN(this.mapWidthInput)){
+					alert('数据错误')
+				}else{
+					let imageWidth = this.mapImageInfo.imageWidth
+					let imageHeight = this.mapImageInfo.imageHeight
+					this.mapActuWidth = this.mapWidthInput
+					this.mapActuHeight = this.mapWidthInput/imageWidth * imageHeight
+				}
+			}
+		}
   }
 };
 </script>
