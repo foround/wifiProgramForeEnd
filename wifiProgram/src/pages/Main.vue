@@ -14,11 +14,11 @@
 </template>
 <script>
     import LeftBanner from "../components/LeftBanner"
-    import drawing from "../components/drawing"
+    import uploadFile from "../components/uploadFile"
     export default{
         components:{
             LeftBanner,
-            drawing
+            uploadFile
         }
     }
 </script>
