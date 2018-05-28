@@ -1,12 +1,9 @@
 <template>
     <div class="container">
         <el-container>
-            <el-aside width='200px'>
-                <LeftBanner></LeftBanner>
-            </el-aside>
             <el-main>
                 <div class="grid-content bg-purple">
-                    <drawing></drawing>
+                    <uploadFile></uploadFile>
                 </div>
             </el-main>
         </el-container>
