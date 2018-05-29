@@ -26,6 +26,7 @@
 </template>
 <script>
 import * as constant from "@/utils/constant";
+import Bus from "@/common/js/bus"
 export default {
 	name: "uploadFile",
 	data() {
@@ -106,6 +107,8 @@ export default {
 					let length = this.sceneImageSize.length,
 						width = this.sceneImageSize.width;
 					let param = new FormData();
+					// Bus.$emit('getTarget',length)
+					// 
 					param.append("placeMap",this.imageFile);
 					param.append("mapLength",length)
 					param.append("mapWidth",width)
@@ -122,7 +125,17 @@ export default {
 							type: 'success',
 							showClose: true
 						})
-						console.log(response)
+						console.log(response.data.data)
+						let filePath = response.data.data.filePath
+						let placeId = response.data.data.id
+						let placeInfo = {
+							filePath: filePath,
+							placeId: placeId
+						}
+						Bus.$emit('placeInfo',placeInfo)
+						this.$router.push({
+							path: '/marker'
+						})
 					}).catch((error)=>{
 						console.log(error)
 					})

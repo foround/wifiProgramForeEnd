@@ -21,6 +21,7 @@
 <script>
 import zrender from "zrender";
 import * as constant from "@/utils/constant";
+import Bus from "@/common/js/bus"
 export default {
     name: "markerPoint",
     data() {
@@ -44,6 +45,16 @@ export default {
         };
     },
     mounted() {
+		Bus.$on("placeInfo",(target)=>{
+			this.imagePath = target.filePath
+			this.placeId = target.placeId,
+			this.mapActuSize = {
+				width: target.mapWidth,
+				length: target.Length
+			}
+			console.log(target)
+		})
+		//console.log(this.$route.query)
         this.mapImagePath = require('@/assets/images/mapDemo.jpg')
         this.initZRender();
         this.renderCanvasMapImage();
