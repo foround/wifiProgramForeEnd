@@ -16,7 +16,6 @@
 			<el-button @click="uploadMarkerInfo">上传Marker信息</el-button>
 		</section>
     </div>
-    
 </template>
 <script>
 import zrender from "zrender";
@@ -119,7 +118,10 @@ export default {
 					"ssid": item.ssid
 				}
 			})
-			console.log(markerListInfo)
+			let formData = new FormData();
+			formData.append('placeId',this.placeId)
+			formData.append('routerList',markerListInfo)
+			console.log(formData.get('routerList'))
 		},
         //增加标记
         addMarker() {
