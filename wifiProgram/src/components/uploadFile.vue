@@ -117,7 +117,7 @@ export default {
 					}
 					console.log(this.imageFile)
 					console.log(param.get('placeMap'))
-					let url = 'http://[2001:da8:215:3c01::a85e]:3389/web/upload'
+					let url = 'http://localhost:3389/web/upload'
 					this.axios.post(url,param,config)
 					.then((response)=>{
 						this.$message({
@@ -132,7 +132,10 @@ export default {
 							filePath: filePath,
 							placeId: placeId
 						}
-						Bus.$emit('placeInfo',placeInfo)
+						console.log(Bus)
+						setTimeout(() => {
+							Bus.$emit('placeInfo',placeInfo)
+						}, 2000);
 						this.$router.push({
 							path: '/marker'
 						})

@@ -44,19 +44,19 @@ export default {
         };
     },
     mounted() {
+        this.initZRender();
 		Bus.$on("placeInfo",(target)=>{
+			//测试用
+        	this.mapImagePath = require('@/assets/images/mapDemo.jpg')
 			this.imagePath = target.filePath
 			this.placeId = target.placeId,
-			this.mapActuSize = {
-				width: target.mapWidth,
-				length: target.Length
-			}
-			console.log(target)
+			//console.log(target)
+			//console.log("target")
+			this.renderCanvasMapImage();
 		})
+		console.log(this.placeId)
 		//console.log(this.$route.query)
-        this.mapImagePath = require('@/assets/images/mapDemo.jpg')
-        this.initZRender();
-        this.renderCanvasMapImage();
+        
     },
     methods: {
         initZRender() {
@@ -118,10 +118,20 @@ export default {
 					"ssid": item.ssid
 				}
 			})
-			let formData = new FormData();
-			formData.append('placeId',this.placeId)
-			formData.append('routerList',markerListInfo)
-			console.log(formData.get('routerList'))
+			let param = {
+				placeId: this.placeId,
+				routerList: markerListInfo
+			}
+			let url = 'http://localhost:3389/web/markers'
+			let config = {
+				header:{'Content-Type':'application/json'}
+			}
+			this.axios.post(url,param)
+			.then((response)=>{
+				console.log(response)
+			}).catch((error)=>{
+				console.log(error)
+			})
 		},
         //增加标记
         addMarker() {
