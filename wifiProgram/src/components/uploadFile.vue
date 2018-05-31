@@ -31,7 +31,7 @@ export default {
 	name: "uploadFile",
 	data() {
 		return {
-			msg: "welcome To Hotal Califoria",
+			message: "welcome To Hotal Califoria",
 			isUploadedImage: false,
 			uploadText: "上传图片",
 			uploadMapImage: {},
@@ -53,11 +53,14 @@ export default {
 		};
 	},
 	mounted() {
+
 	},
 	watch: {},
 	methods: {
 		triggerUpload() {
-			console.log("触发图片上传");
+			this.$message({
+				message: "触发图片上传"
+			});
 			let uploadElem = this.$refs.uploadElem;
 			//触发文件域点击事件
 			uploadElem.click();
@@ -65,7 +68,9 @@ export default {
 		//当文件域被改变(有上传的图片时),将图片渲染到canvas上
 		showUploadMsg(e) {
 			let $this = this;
-			console.log("展示图片上传信息");
+			$this.$message({
+				message: "展示图片上传信息"
+			});
 			let imageFile = this.$refs.uploadElem.files[0];
 			this.imageFile = imageFile
 			const reader = new FileReader();
@@ -73,8 +78,12 @@ export default {
 				reader.readAsDataURL(imageFile);
 				//图片信息读取后执行的操作
 				reader.onload = function(event) {
-					console.log("读取图片成功");
+					$this.$message({
+						type: "success",
+						message: "读取图片成功"
+					});
 					let imageData = event.target.result;
+					$this.imageData = imageData
 					let image = new Image();
 					image.src = imageData;
 					image.style = `width: ${$this.uploadImageWidth}px`
@@ -96,14 +105,20 @@ export default {
 					};
 				};
 			} catch (e) {
-				console.log("上传图片出错");
+				$this.$message({
+					type: "warning",
+					message: "上传图片出错"
+				});
 			}
 		},
 		//提交图片
 		submitForm(formName){
+			let $this = this
 			this.$refs[formName].validate((valid)=>{
 				if(valid){
-					console.log('验证通过')
+					$this.$message({
+						message: "验证通过"
+					});
 					let length = this.sceneImageSize.length,
 						width = this.sceneImageSize.width;
 					let param = new FormData();
@@ -115,9 +130,7 @@ export default {
 					let config = {
 						header:{'Content-Type':'multipart/form-data'}
 					}
-					console.log(this.imageFile)
-					console.log(param.get('placeMap'))
-					let url = 'http://localhost:3389/web/upload'
+					let url = '/web/upload'
 					this.axios.post(url,param,config)
 					.then((response)=>{
 						this.$message({
@@ -125,17 +138,16 @@ export default {
 							type: 'success',
 							showClose: true
 						})
-						console.log(response.data.data)
 						let filePath = response.data.data.filePath
 						let placeId = response.data.data.id
 						let placeInfo = {
-							filePath: filePath,
-							placeId: placeId
+							placeId: placeId,
+							imageData: $this.imageData
 						}
-						console.log(Bus)
 						setTimeout(() => {
+							
 							Bus.$emit('placeInfo',placeInfo)
-						}, 2000);
+						}, 500);
 						this.$router.push({
 							path: '/marker'
 						})
@@ -143,7 +155,10 @@ export default {
 						console.log(error)
 					})
 				}else{
-					console.log('表单信息不合法')
+					$this.$message({
+						type: "warning",
+						message: '表单信息不合法'
+					});
 				}
 			})
 		}

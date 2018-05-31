@@ -13,7 +13,7 @@
             <canvas ref="myZrender" class='myZrender' :width="canvasWidth" :height="canvasHeight" v-on:click="handlePoint"></canvas>
         </div>
 		<section class="upload-marker-info">
-			<el-button @click="uploadMarkerInfo">上传Marker信息</el-button>
+			<el-button @click="uploadMarkerInfo" :disabled="isUploaded">上传Marker信息</el-button>
 		</section>
     </div>
 </template>
@@ -40,23 +40,25 @@ export default {
 			},
 			canvasWidth: 0,
 			canvasHeight: 0,
-            imagePath: '@/assets/images/mapDemo.jpg'
+			//是否已上传标记信息的标记为
+			isUploaded: false
         };
     },
     mounted() {
         this.initZRender();
+		this.renderCanvasMapImage();
 		Bus.$on("placeInfo",(target)=>{
+			console.log(target)
+			if(target == null){
+				this.$router.push({
+					path: '/'
+				})
+			}
 			//测试用
-        	this.mapImagePath = require('@/assets/images/mapDemo.jpg')
-			this.imagePath = target.filePath
+			this.mapImagePath = target.imageData
 			this.placeId = target.placeId,
-			//console.log(target)
-			//console.log("target")
 			this.renderCanvasMapImage();
 		})
-		console.log(this.placeId)
-		//console.log(this.$route.query)
-        
     },
     methods: {
         initZRender() {
@@ -109,29 +111,42 @@ export default {
 		//上传标记信息
 		uploadMarkerInfo(){
 			let markerList = this.markerList
-			let imgWidth = this.mapImageInfo.width
-			let imgHeight = this.mapImageInfo.height
-			let markerListInfo = markerList.map((item)=>{
-				return {
-					"x": item.x/imgWidth,
-					"y": item.y/imgHeight,
-					"ssid": item.ssid
+			let $this = this
+			if(markerList.length == 0){
+				this.$message({
+					type: "warning",
+					message: "请添加标记"
+				})
+			}else{
+				let imgWidth = this.mapImageInfo.width
+				let imgHeight = this.mapImageInfo.height
+				let markerListInfo = markerList.map((item)=>{
+					return {
+						"x": item.x/imgWidth,
+						"y": item.y/imgHeight,
+						"ssId": item.ssid
+					}
+				})
+				let param = {
+					placeId: this.placeId,
+					routerList: markerListInfo
 				}
-			})
-			let param = {
-				placeId: this.placeId,
-				routerList: markerListInfo
+				let url = '/web/markers'
+				let config = {
+					header:{'Content-Type':'application/json'}
+				}
+				this.axios.post(url,param,config)
+				.then((response)=>{
+					$this.$message({
+						type: "success",
+						message: "上传标记列表成功"
+					})
+					$this.isUploaded = true
+					console.log(response)
+				}).catch((error)=>{
+					console.log(error)
+				})
 			}
-			let url = 'http://localhost:3389/web/markers'
-			let config = {
-				header:{'Content-Type':'application/json'}
-			}
-			this.axios.post(url,param)
-			.then((response)=>{
-				console.log(response)
-			}).catch((error)=>{
-				console.log(error)
-			})
 		},
         //增加标记
         addMarker() {
