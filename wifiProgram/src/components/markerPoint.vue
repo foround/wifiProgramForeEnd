@@ -226,6 +226,9 @@ export default {
 					}).then(({ value }) => {
 						let ssid = value
 						let isValidSsid = true
+						//保证ssid为整数
+						if(Number.isInteger(parseInt(ssid)) == false)
+							isValidSsid = false
 						//确定ssid不可以重复，应该从后台得到已有的ssid列表
 						for(let item of [...this.routerList,...this.rawRouterList]){
 							if(ssid == item.ssid)
