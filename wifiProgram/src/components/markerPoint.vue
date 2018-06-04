@@ -31,7 +31,7 @@ export default {
             canvasHeight: 400,
             scale: 2,
             canvasMode: constant.DEFAULT,
-			markerList: [],
+			routerList: [],
 			mapImagePath: "",
 			mapImageInfo:{
 				imageElem: "",
@@ -54,9 +54,18 @@ export default {
 					path: '/'
 				})
 			}
+			console.log(`placeId is ${target.placeId}`)
 			//测试用
 			this.mapImagePath = target.imageData
-			this.placeId = target.placeId,
+			this.placeId = target.placeId
+			//获取已经有的标记信息
+			let $this = this
+			let url = '/web/routerList/'+this.placeId
+			this.axios.get(url)
+			.then((response)=>{
+				let rawRouterList = response.data.data
+				$this.rawRouterList = rawRouterList
+			})
 			this.renderCanvasMapImage();
 		})
     },
@@ -110,9 +119,9 @@ export default {
 		},
 		//上传标记信息
 		uploadMarkerInfo(){
-			let markerList = this.markerList
+			let routerList = this.routerList
 			let $this = this
-			if(markerList.length == 0){
+			if(routerList.length == 0){
 				this.$message({
 					type: "warning",
 					message: "请添加标记"
@@ -120,7 +129,7 @@ export default {
 			}else{
 				let imgWidth = this.mapImageInfo.width
 				let imgHeight = this.mapImageInfo.height
-				let markerListInfo = markerList.map((item)=>{
+				let routerListInfo = routerList.map((item)=>{
 					return {
 						"x": item.x/imgWidth,
 						"y": item.y/imgHeight,
@@ -129,7 +138,7 @@ export default {
 				})
 				let param = {
 					placeId: this.placeId,
-					routerList: markerListInfo
+					routerList: routerListInfo
 				}
 				let url = '/web/markers'
 				let config = {
@@ -185,8 +194,8 @@ export default {
 				}
 			});
 			//改变标记的位置
-			let markerList = this.markerList;
-			for (let item of markerList) {
+			let routerList = this.routerList;
+			for (let item of routerList) {
 				let markerImage = item.markerImage;
 				let markerX = item.x;
 				let markerY = item.y;
@@ -218,7 +227,7 @@ export default {
 						let ssid = value
 						let isValidSsid = true
 						//确定ssid不可以重复，应该从后台得到已有的ssid列表
-						for(let item of this.markerList){
+						for(let item of [...this.routerList,...this.rawRouterList]){
 							if(ssid == item.ssid)
 								isValidSsid = false
 						}
@@ -250,7 +259,7 @@ export default {
 								markerImage: markerImage,
 								ssid:ssid
 							};
-							this.markerList.push(markerInfo);
+							this.routerList.push(markerInfo);
 							this.zr.add(markerImage);
 							this.$message({
 								type: 'success',
@@ -273,8 +282,8 @@ export default {
 				//删除标记
                 case constant.REMOVE_MARKER:
 				{
-					let markerList = this.markerList;
-					for (let [index, item] of markerList.entries()) {
+					let routerList = this.routerList;
+					for (let [index, item] of routerList.entries()) {
 						let markerX = item.x;
 						let markerY = item.y;
 
@@ -285,10 +294,10 @@ export default {
 						let yInRouterRange = yDeviation < constant.MARKER_SIZE && xDeviation < constant.MOUSE_DEVIATION
 						if (xInRouterRange && yInRouterRange) {
 							this.zr.remove(item.markerImage);
-							markerList.splice(index, 1);
+							routerList.splice(index, 1);
 						}
 					}
-					this.markerList = markerList;
+					this.routerList = routerList;
 					break;
 				}
             }
