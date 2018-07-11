@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Main from '@/pages/Main'
-import Marker from '@/pages/Marker'
+import routerUpload from '@/pages/routerUpload'
+import routerModified from '@/pages/routerModified'
+import routerEdit from '@/pages/routerEdit'
 
 Vue.use(Router)
 
@@ -10,21 +12,22 @@ export default new Router({
 		{
 			path: '/',
 			name: 'main',
-			component: Main
-		},{
-			path: '/marker',
-			name: 'marker',
-			component:Marker,
-			beforeEnter(to,from,next){
-				console.log(from)
-				if (from.name == null) {
-					console.log('Illegal enter')
-				  	next({path:'/'})
-				} else {
-				  next()
-
-				}
-			}
+            component: Main,
+            meta: {
+                keepAlive: false // 需要被缓存
+            }
+		}, {
+            path: '/routerUpload',
+            name: 'routerUpload',
+            component: routerUpload,
+		}, {
+            path: '/routerModified',
+            name: 'routerModified',
+            component: routerModified,
+		}, {
+            path: '/routerEdit',
+            name: 'routerEdit',
+            component: routerEdit,
 		}
 	]
 

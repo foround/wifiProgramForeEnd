@@ -1,13 +1,16 @@
 <template>
-    <div class="container">
-        <el-container>
+    <el-container class="container">
+        <el-aside width="200px">
+            <LeftBanner></LeftBanner>
+        </el-aside>
+        <el-main>
             <el-main>
                 <div class="grid-content bg-purple">
                     <uploadFile></uploadFile>
                 </div>
             </el-main>
-        </el-container>
-    </div>
+        </el-main>
+    </el-container>
 </template>
 <script>
     import LeftBanner from "../components/LeftBanner"
@@ -18,20 +21,9 @@
             uploadFile
         }
     }
+    
 </script>
 <style scoped>
-    .container{
-        width: 100%;
-        height: 100%;
-        background-image: url("../assets/images/background.jpg");
-        background-size: 100% 100%;
-    }
-    .el-container{
-        height: 100%;
-    }
-    .el-aside{
-        overflow: hidden;
-
-    }
+    @import url("../common/css/layout.css");
 </style>
 

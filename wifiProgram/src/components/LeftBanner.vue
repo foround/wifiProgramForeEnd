@@ -6,8 +6,27 @@
       active-text-color="#ffd04b"
       :router="router"
     >
-        <el-menu-item index="1">上传图片</el-menu-item>
-        <el-menu-item index="2">标记坐标</el-menu-item>
+        <el-menu-item index="1" :route="routerDest.uploadScene">
+            上传场景图
+        </el-menu-item>
+        <el-submenu index="2">
+            <template slot='title'>
+                <i class="el-icon-menu"></i>
+                <span slot="title">路由器操作</span>
+            </template>
+            <el-menu-item-group index="2">
+                <el-menu-item index="2-1" :route="routerDest.uploadRouters">
+                    上传路由器信息
+                </el-menu-item>
+                <el-menu-item index="2-2" :route="routerDest.modifyRouters">
+                    修改路由器信息
+                </el-menu-item>
+                <el-menu-item index="2-3" :route="routerDest.previewRouters">
+                    查看路由器信息
+                </el-menu-item>
+            </el-menu-item-group>
+        </el-submenu>
+        <el-menu-item index="3">退出登录</el-menu-item>
     </el-menu>
 </template>
 <style>
@@ -22,7 +41,26 @@ export default {
      name: 'LeftBanner',
      data(){
          return {
-             router: false
+            router: true,
+            routerDest: {
+                uploadScene:{
+                    name: "main",
+                    path: "/"
+                },
+                uploadRouters:{
+                    name: "routerUpload",
+                    path: "/routerUpload"
+                },
+                modifyRouters:{
+                    name: "routerModified",
+                    path: "/routerModified"
+                },
+                previewRouters:{
+                    name: "main",
+                    path: "/"
+                },
+                
+            }
          }
      }
 }

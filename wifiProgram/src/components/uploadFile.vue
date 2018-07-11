@@ -122,8 +122,6 @@ export default {
 					let length = this.sceneImageSize.length,
 						width = this.sceneImageSize.width;
 					let param = new FormData();
-					// Bus.$emit('getTarget',length)
-					// 
 					param.append("placeMap",this.imageFile);
 					param.append("mapLength",length)
 					param.append("mapWidth",width)
@@ -133,23 +131,20 @@ export default {
 					let url = '/web/upload'
 					this.axios.post(url,param,config)
 					.then((response)=>{
-						this.$message({
-							message: '图片上传成功',
-							type: 'success',
-							showClose: true
-						})
-						let filePath = response.data.data.filePath
 						let placeId = response.data.data.id
-						let placeInfo = {
-							placeId: placeId,
-							imageData: $this.imageData
-						}
-						setTimeout(() => {
-							
-							Bus.$emit('placeInfo',placeInfo)
-						}, 500);
-						this.$router.push({
-							path: '/marker'
+						this.$confirm('场景添加成功，是否继续添加场景的路由器信息')
+						.then(()=>{
+							this.$router.push({
+								path: '/routerAdd',
+								query:{
+									placeId: placeId
+								}
+							})
+						}).catch(()=>{
+							console.log('asd')
+							this.$router.push({
+								path:"/"
+							})
 						})
 					}).catch((error)=>{
 						console.log(error)
@@ -216,5 +211,8 @@ export default {
 		transform: translateX(-50%);
 		padding: 30px;
 		border-radius: 10px;
+	}
+	.upload-image-preview{
+		background-color: rgba(0, 0, 0, 0.3)
 	}
 </style>
