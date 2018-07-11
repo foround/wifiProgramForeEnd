@@ -22,7 +22,7 @@
         <div class="canvasWrapper">
             <canvas ref="myZrender" class='myZrender' :width="canvasWidth" :height="canvasHeight" v-on:click="handlePoint"></canvas>
         </div>
-		<section>
+		<section class="uploadArea">
 			<el-button @click="uploadRouterInfo" :disabled="isUploaded">上传路由器信息</el-button>
 		</section>
     </div>
@@ -30,7 +30,7 @@
 <script>
 import zrender from "zrender";
 import * as constant from "@/utils/constant";
-import renderCanvasMapImage from "@/utils/renderCanvas"
+import {renderCanvasMapImage} from "@/utils/renderCanvas"
 import Bus from "@/common/js/bus";
 export default {
     name: "routerHandler",
@@ -48,6 +48,7 @@ export default {
                 width: 0,
                 height: 0
             },
+            sceneInfo:{},
             canvasWidth: 0,
             canvasHeight: 0,
             //是否已上传标记信息的标记为
@@ -61,22 +62,27 @@ export default {
     },
     mounted() {
 		this.initZRender();
-        //获取已经有的标记信息
         let $this = this;
-        let url = `/web/routerList/${this.placeId}`
+        let url = `/web/getSceneInfo/${this.placeId}`
         this.axios
             .get(url)
             .then(response => {
                 console.log(response.data.data);
-                let rawRouterList = response.data.data;
+                let res = response.data.data;
+                let rawRouterList = res.routerSet
                 $this.rawRouterList = rawRouterList;
+                //获取地图实际长宽
+                $this.sceneInfo.mapLength = res.mapLength
+                $this.sceneInfo.mapWidth = res.mapWidth
+                //获取已经有的标记信息
+                renderCanvasMapImage(this);
             })
             .catch(error => {
                 let rawRouterList = [];
                 $this.rawRouterList = [];
             });
         //测试用
-        renderCanvasMapImage(this);
+        
     },
     methods: {
         initZRender() {
@@ -328,5 +334,8 @@ section {
 }
 .el-input {
   width: 150px;
+}
+.uploadArea{
+    margin-top: 30px;
 }
 </style>

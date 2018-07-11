@@ -12,22 +12,25 @@ export default new Router({
 		{
 			path: '/',
 			name: 'main',
-            component: Main,
-            meta: {
-                keepAlive: false // 需要被缓存
-            }
+                  component: Main,
+                  meta: {
+                        keepAlive: false // 不需要被缓存
+                  }
 		}, {
-            path: '/routerUpload',
-            name: 'routerUpload',
-            component: routerUpload,
+                  path: '/routerUpload',
+                  name: 'routerUpload',
+                  component: routerUpload,
 		}, {
-            path: '/routerModified',
-            name: 'routerModified',
-            component: routerModified,
+                  path: '/routerModified',
+                  name: 'routerModified',
+                  component: routerModified,
 		}, {
-            path: '/routerEdit',
-            name: 'routerEdit',
-            component: routerEdit,
+                  path: '/routerEdit',
+                  name: 'routerEdit',
+                  component: routerEdit,
+                  meta: {
+                        keepAlive: false // 不需要被缓存
+                  }
 		}
 	]
 

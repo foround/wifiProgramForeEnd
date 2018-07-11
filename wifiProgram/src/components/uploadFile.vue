@@ -135,7 +135,7 @@ export default {
 						this.$confirm('场景添加成功，是否继续添加场景的路由器信息')
 						.then(()=>{
 							this.$router.push({
-								path: '/routerAdd',
+								path: '/routerEdit',
 								query:{
 									placeId: placeId
 								}
