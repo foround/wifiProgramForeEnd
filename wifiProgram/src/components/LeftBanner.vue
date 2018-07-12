@@ -60,8 +60,8 @@ export default {
                     path: "/routerModified"
                 },
                 previewRouters:{
-                    name: "main",
-                    path: "/"
+                    name: "routerPreview",
+                    path: "/routerPreview"
                 },
                 
             }

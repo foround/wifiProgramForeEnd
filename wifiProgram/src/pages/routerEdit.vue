@@ -7,13 +7,25 @@
             <el-container>
                 <el-header>
                     <h1>
-                        场景路由器信息编辑
+                        <span v-if="isPreview == false">场景路由器信息编辑</span>
+                        <span v-if="isPreview == true">场景路由器信息查看</span>
 			            <el-tag>场景ID:{{placeId}}</el-tag>
                     </h1>
                 </el-header>
                 <el-main>
+                    <section class="sliderContainer">
+                        <span>是否以地图模式查看</span>
+                        <el-switch
+                            v-model="isMapMode"
+                            active-color="#13ce66"
+                            inactive-color="grey"
+                            v-if="isPreview == true">
+                        </el-switch>
+                    </section>
+
                     <div class="grid-content bg-purple">
-                        <routerHandler :place-id="placeId"></routerHandler>
+                        <routerHandler :place-id="placeId" :isPreview="isPreview" v-if="isMapMode"></routerHandler>
+                        <routerTable :place-id="placeId" v-if="!isMapMode"></routerTable>
                     </div>
                 </el-main>
             </el-container>
@@ -23,17 +35,21 @@
 <script>
     import LeftBanner from "../components/LeftBanner"
     import routerHandler from "../components/routerHandler"
+    import routerTable from "../components/routerTable"
     export default{
         components:{
             LeftBanner,
-            routerHandler
+            routerHandler,
+            routerTable
         },
         data(){
             return {
+                isMapMode: true
             }
         },
         beforeCreate() {
             this.placeId = this.$route.query.placeId;
+            this.isPreview = eval(this.$route.query.isPreview);
         },
         created(){
 
@@ -47,6 +63,11 @@
     @import url("../common/css/layout.css");
     header{
         margin-top: 50px;
+    }
+    .sliderContainer{
+        text-align: left;
+        margin-bottom: 50px;
+        margin-left: 10%;
     }
 </style>
 

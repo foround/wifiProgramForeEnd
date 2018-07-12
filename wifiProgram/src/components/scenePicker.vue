@@ -42,7 +42,8 @@ export default {
 				this.$router.push({
 					path: "/routerEdit",
 					query: {
-						placeId: this.value
+						placeId: this.value,
+						isPreview: this.isPreview
 					}
 				})
 			}
@@ -66,7 +67,7 @@ export default {
 			this.options = options
 		}
 	},
-	props:['sceneIds','title']
+	props:['sceneIds','title','isPreview']
 };
 </script>
 <style scoped>

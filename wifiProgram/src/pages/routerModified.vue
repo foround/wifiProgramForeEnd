@@ -8,7 +8,8 @@
                 <div class="grid-content bg-purple">
                     <scene-picker
                         :scene-ids = "routerList"
-                        :title = "title">
+                        :title = "title"
+                        :isPreview = false>
                     </scene-picker>
                 </div>
             </el-main>

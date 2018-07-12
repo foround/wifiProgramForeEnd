@@ -10,7 +10,7 @@
 							<el-button type="info" size="small" icon="el-icon-minus" v-on:click="changeCanvasScale(false)"></el-button>
 						</el-button-group>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="6"  v-if="isPreview == false">
 						<div class="router-handlers">
 							<el-button type="primary" @click='addRouter'>增加标记</el-button>
 							<el-button type="success" @click='removeRouter'>删除标记</el-button>
@@ -22,7 +22,7 @@
         <div class="canvasWrapper">
             <canvas ref="myZrender" class='myZrender' :width="canvasWidth" :height="canvasHeight" v-on:click="handlePoint"></canvas>
         </div>
-		<section class="uploadArea">
+		<section class="uploadArea" v-if="isPreview == false">
 			<el-button @click="uploadRouterInfo" :disabled="isUploaded">上传路由器信息</el-button>
 		</section>
     </div>
@@ -55,13 +55,14 @@ export default {
             isUploaded: false
         };
     },
-    props:["placeId"],
+    props:["placeId","isPreview"],
     beforeMount() {
         console.log(this.placeId)
         this.mapImagePath = `/web/map/${this.placeId}`
     },
     mounted() {
-		this.initZRender();
+        this.initZRender();
+        this.isPreview = eval(this.isPreview)
         let $this = this;
         let url = `/web/getSceneInfo/${this.placeId}`
         this.axios

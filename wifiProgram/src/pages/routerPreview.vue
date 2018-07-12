@@ -9,13 +9,14 @@
                     <scene-picker
                         :scene-ids = "routerList"
                         :title = "title"
-                        :isPreview = false>
+                        :isPreview = true>
                     </scene-picker>
                 </div>
             </el-main>
         </el-container>
     </div>
 </template>
+
 <script>
     import LeftBanner from "../components/LeftBanner"
     import scenePicker from "../components/scenePicker"
@@ -27,12 +28,12 @@
         data(){
             return {
                 routerList:[],
-                title: "请选择待上传路由器信息的场景id"
+                title: "请选择要察看的场景id"
             }
         },
         created(){
             let $this = this
-            let url = "/web/getSceneUnmarked"
+            let url = "/web/getAllScene"
             this.axios.get(url)
                 .then(response=>{
                     $this.routerList = response.data.data
@@ -47,4 +48,3 @@
 <style scoped>
     @import url("../common/css/layout.css");
 </style>
-
