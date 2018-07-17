@@ -8,19 +8,20 @@
                 <el-header>
                     <h1>
                         <span v-if="isPreview == false">场景路由器信息编辑</span>
-                        <span v-if="isPreview == true">场景路由器信息查看</span>
+                        <span v-else>场景路由器信息查看</span>
 			            <el-tag>场景ID:{{placeId}}</el-tag>
                     </h1>
                 </el-header>
                 <el-main>
-                    <section class="sliderContainer">
-                        <span>是否以地图模式查看</span>
-                        <el-switch
-                            v-model="isMapMode"
-                            active-color="#13ce66"
-                            inactive-color="grey"
-                            v-if="isPreview == true">
-                        </el-switch>
+                    <section class="sliderContainer" v-if="isPreview != false">
+                        <el-tag>
+                            地图模式
+                            <el-switch
+                                v-model="isMapMode"
+                                active-color="#56A2FF"
+                                inactive-color="grey">
+                            </el-switch>
+                        </el-tag>
                     </section>
 
                     <div class="grid-content bg-purple">
@@ -52,7 +53,6 @@
             this.isPreview = eval(this.$route.query.isPreview);
         },
         created(){
-
         },
         methods:{
 
@@ -67,6 +67,9 @@
     .sliderContainer{
         text-align: left;
         margin-bottom: 50px;
+        margin-left: 10%;
+    }
+    .el-main{
         margin-left: 10%;
     }
 </style>

@@ -8,8 +8,7 @@
                 <div class="grid-content bg-purple">
                     <scene-picker
                         :scene-ids = "routerList"
-                        :title = "title"
-                        :isPreview = false>
+                        :sceneType = "sceneType">
                     </scene-picker>
                 </div>
             </el-main>
@@ -19,6 +18,7 @@
 <script>
     import LeftBanner from "../components/LeftBanner"
     import scenePicker from "../components/scenePicker"
+    import * as constant from "@/utils/constant";
     export default{
         components:{
             LeftBanner,
@@ -27,7 +27,7 @@
         data(){
             return {
                 routerList:[],
-                title: "请选择待上传路由器信息的场景id"
+                sceneType: constant.UPLOAD
             }
         },
         created(){

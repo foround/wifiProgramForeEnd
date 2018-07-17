@@ -1,8 +1,9 @@
 <template>
-	<el-dialog :title="title" :visible.sync="dialogFormVisible" :show-close="false">
+	<section class='picker-container'>
+		<header>{{title}}</header>
 		<el-form>
 			<el-form-item label="场景id" :label-width="formLabelWidth">
-				<el-select v-model="value" placeholder="请选择活动区域">
+				<el-select v-model="value" placeholder="请选择场景id">
 					<el-option 
 						v-for="item in options"
 						:key="item.value"
@@ -13,23 +14,24 @@
 				</el-select>
 			</el-form-item>
 		</el-form>
-		<div slot="footer" class="dialog-footer">
+		<div class="footer">
 			<el-button @click="cancel">取 消</el-button>
 			<el-button type="primary" @click="confirm">确 定</el-button>
 		</div>
-	</el-dialog>
+	</section>
 </template>
 
 <script>
+import * as constant from "@/utils/constant";
 export default {
     data() {
         return {
             options: [],
             value: null,
 			formLabelWidth: '120px',
-			dialogFormVisible: true,
         };
 	},
+	props:['sceneIds','sceneType'],
 	methods:{
 		confirm(){
 			if(this.value== null){
@@ -38,18 +40,16 @@ export default {
 					type: 'warning'
 				});
 			}else{
-				this.dialogFormVisible = false
 				this.$router.push({
 					path: "/routerEdit",
 					query: {
 						placeId: this.value,
-						isPreview: this.isPreview
+						isPreview: this.sceneType == constant.PREVIEW? true: false
 					}
 				})
 			}
 		},
 		cancel(){
-			this.dialogFormVisible = false
 			this.$router.go(-1)
 		}
 	},
@@ -67,8 +67,44 @@ export default {
 			this.options = options
 		}
 	},
-	props:['sceneIds','title','isPreview']
+	computed:{
+		title(){
+			let keyword = ''
+			switch (this.sceneType) {
+				case constant.PREVIEW:
+					keyword = "查看"
+					break;
+				case constant.MODIFIED:
+					keyword = "修改"
+					break;
+				case constant.UPLOAD:
+					keyword = "上传"
+					break;
+				default:
+					break;
+			}
+			return `请选择要${keyword}的场景id`
+		}
+	}
 };
 </script>
 <style scoped>
+	.picker-container{
+		width: 60%;
+		padding: 5% 10%;
+		box-sizing: border-box;
+		margin: 30px auto;
+		background-color: rgba(0,0,0,0.2);
+		border-radius: 10px;
+	}
+	header{
+		font-size: 20px;
+	}
+	.el-form{
+		margin-top: 50px;
+	}
+	.footer{
+		display: flex;
+		justify-content: space-around;
+	}
 </style>

@@ -8,3 +8,8 @@ export const MARKER_SIZE = 20
 export const MOUSE_DEVIATION = 0;
 export const MARKER_IMAGE = require('@/assets/images/marker.png')
 export const MIN_DECIMAL = 0.0001
+
+//路由器修改标志
+export const PREVIEW = 0
+export const UPLOAD = 1
+export const MODIFIED = 2

@@ -7,7 +7,7 @@ import zrender from 'zrender'
 Vue.use(zrender)
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-Vue.use(VueAxios,axios)
+Vue.use(VueAxios, axios)
 
 
 import 'element-ui/lib/theme-chalk/index.css';

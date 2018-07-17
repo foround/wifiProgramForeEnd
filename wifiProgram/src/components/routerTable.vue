@@ -1,35 +1,51 @@
 
 <template>
-    <div class="container">
-        <section>
-            基本信息：场景长度{{mapLength}}m，场景宽度{{mapWidth}}m
-        </section>
-        <el-table
-        :data="routerList"
-        class="table-exhibiton"
-        :cell-style="{textAlign:left}" >
-            <el-table-column
-                prop="id"
-                label="id"
-                width="180">
-            </el-table-column>
-            <el-table-column
-                prop="ssId"
-                label="ssId"
-                width="180">
-            </el-table-column>
-            <el-table-column
-                prop="x"
-                label="x坐标"
-                width="180">
-            </el-table-column>
-            <el-table-column
-                prop="y"
-                label="y坐标"
-                width="180">
-            </el-table-column>
-        </el-table>
-    </div>
+    <el-row class="container">
+        <el-col :span="4" :offset="2">
+            <el-card>
+                <div slot="header" class="clearfix">
+                    <span>场景基本信息</span>
+                </div>
+                <div class="basic-card-info">
+                    <p>长度{{mapLength}}m</p>
+                    <p>宽度{{mapWidth}}m</p>
+                </div>
+            </el-card>
+        </el-col>
+        <el-col :span="12" :offset="1">
+            <el-card class="table-card" >
+                <div slot="header" class="clearfix">
+                    <span>场景详细信息</span>
+                </div>
+                <div>
+                    <el-table
+                    :data="routerList"
+                    class="table-exhibiton" align="center" header-align="left">
+                        <el-table-column
+                            prop="id"
+                            label="id"
+                            width="100">
+                        </el-table-column>
+                        <el-table-column
+                            prop="ssId"
+                            label="ssId"
+                            width="100">
+                        </el-table-column>
+                        <el-table-column
+                            prop="x"
+                            label="x坐标"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="y"
+                            label="y坐标"
+                            >
+                        </el-table-column>
+                    </el-table>
+                </div>
+            </el-card>
+        </el-col>
+    </el-row>
 </template>
 
 <script>
@@ -41,9 +57,7 @@ export default {
     },
     components: {},
     created(){
-        console.log('aa')
         let $this = this;
-        console.log('aa')
         let url = `/web/getSceneInfo/${this.placeId}`
         this.axios
             .get(url)
@@ -68,8 +82,19 @@ export default {
 
 </script>
 <style scoped>
+.container{
+    display: flex;
+}
+.el-card{
+    min-height: 200px;
+}
 .table-exhibiton{
     margin: 0 auto;
-    width: 40%;
+}
+.basic-card-info{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch
+
 }
 </style>

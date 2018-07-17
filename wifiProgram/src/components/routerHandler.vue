@@ -10,7 +10,7 @@
 							<el-button type="info" size="small" icon="el-icon-minus" v-on:click="changeCanvasScale(false)"></el-button>
 						</el-button-group>
 					</el-col>
-					<el-col :span="6"  v-if="isPreview == false">
+					<el-col :span="12"  v-if="isPreview == false">
 						<div class="router-handlers">
 							<el-button type="primary" @click='addRouter'>增加标记</el-button>
 							<el-button type="success" @click='removeRouter'>删除标记</el-button>
