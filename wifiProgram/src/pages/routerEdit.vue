@@ -48,11 +48,13 @@
                 isMapMode: true
             }
         },
-        beforeCreate() {
+        activated() {
             this.placeId = this.$route.query.placeId;
             this.isPreview = eval(this.$route.query.isPreview);
         },
         created(){
+            this.placeId = this.$route.query.placeId;
+            this.isPreview = eval(this.$route.query.isPreview);
         },
         methods:{
 

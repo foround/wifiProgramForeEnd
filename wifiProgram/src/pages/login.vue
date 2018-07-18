@@ -30,18 +30,28 @@ export default {
     },
     components: {},
     created(){},
-    mounted(){},
     methods: {
         login(){
+            let $this = this
             let username = this.form.username,
                 password = this.form.password
-            this.axios
-            console.log(username ,password)
-            if(username == "admin"&& password == "admin"){
-                console.log("success")
-            }else{
-                console.log('fail')
+            let params = {
+                username: username,
+                password: password
             }
+            let config = {
+                headers:{
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }
+            this.axios.post('/login',params,config)
+                .then((response)=>{
+                    if(response.data.errcode == 0){
+                        console.log(`origin role is ${response.data.data.role}`)
+                        window.role = response.data.data.role
+                        $this.$router.replace("/")
+                    }
+                })
         }
     }
 }

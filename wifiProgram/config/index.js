@@ -10,11 +10,16 @@ module.exports = {
     assetsSubDirectory: "static",
     assetsPublicPath: "/",
     proxyTable: {
-      "/web": {
-        //此处并非一定和url一致。
-        target: "http://localhost:4389",
-        changeOrigin: true //允许跨域
-      }
+        "/web": {
+          //此处并非一定和url一致。
+          target: "http://localhost:4389",
+          changeOrigin: true //允许跨域
+        },
+        "/login": {
+          //此处并非一定和url一致。
+          target: "http://localhost:8888",
+          changeOrigin: true //允许跨域
+        }
     },
 
     // Various Dev Server settings

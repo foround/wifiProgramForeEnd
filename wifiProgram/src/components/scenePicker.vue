@@ -23,6 +23,7 @@
 
 <script>
 import * as constant from "@/utils/constant";
+const keywordsList = ["查看","修改","上传"]
 export default {
     data() {
         return {
@@ -69,20 +70,7 @@ export default {
 	},
 	computed:{
 		title(){
-			let keyword = ''
-			switch (this.sceneType) {
-				case constant.PREVIEW:
-					keyword = "查看"
-					break;
-				case constant.MODIFIED:
-					keyword = "修改"
-					break;
-				case constant.UPLOAD:
-					keyword = "上传"
-					break;
-				default:
-					break;
-			}
+			let keyword = keywordsList[this.sceneType]
 			return `请选择要${keyword}的场景id`
 		}
 	}

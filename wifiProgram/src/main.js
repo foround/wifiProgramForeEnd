@@ -5,9 +5,13 @@ import router from './router'
 
 import zrender from 'zrender'
 Vue.use(zrender)
+
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios)
+
+import VueCookie from "vue-cookie"
+Vue.use(VueCookie)
 
 
 import 'element-ui/lib/theme-chalk/index.css';
@@ -15,7 +19,7 @@ import App from './App'
 Vue.prototype.$zrender = zrender
 
 Vue.config.productionTip = false
-
+Vue.prototype.role = null
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

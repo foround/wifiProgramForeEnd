@@ -16,11 +16,11 @@
                 <span slot="title">路由器操作</span>
             </template>
             <el-menu-item-group index="2">
-                <el-menu-item index="2-1" :route="routerDest.uploadRouters">
+                <el-menu-item index="2-1" :route="routerDest.uploadRouters" v-if="isAdmin">
                     <i class="el-icon-upload"></i>
                     上传路由器信息
                 </el-menu-item>
-                <el-menu-item index="2-2" :route="routerDest.modifyRouters">
+                <el-menu-item index="2-2" :route="routerDest.modifyRouters"  v-if="isAdmin">
                     <i class="el-icon-edit"></i>
                     修改路由器信息
                 </el-menu-item>
@@ -42,9 +42,9 @@
 </style>
 <script>
 export default {
-     name: 'LeftBanner',
-     data(){
-         return {
+    name: 'LeftBanner',
+    data(){
+        return {
             router: true,
             routerDest: {
                 uploadScene:{
@@ -63,10 +63,21 @@ export default {
                     name: "routerPreview",
                     path: "/routerPreview"
                 },
-                
-            }
-         }
-     }
+            },
+            isAdmin: false
+        }
+    },
+    activated(){
+        let roleCookie = this.$cookie.get("role")
+        console.log(roleCookie)
+        if(window.role == undefined && roleCookie == null){
+            this.$router.replace('/login')
+        }else{
+            let role = window.role || roleCookie;
+            this.isAdmin = role == 200? true: false
+            console.log(`this.isAdmin is ${this.isAdmin}`)
+        }
+    }
 }
 </script>
 

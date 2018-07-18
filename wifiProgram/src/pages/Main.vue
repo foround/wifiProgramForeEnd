@@ -19,9 +19,11 @@
         components:{
             LeftBanner,
             uploadFile
+        },
+        mounted(){
+            console.log(window.role)
         }
     }
-    
 </script>
 <style scoped>
     @import url("../common/css/layout.css");

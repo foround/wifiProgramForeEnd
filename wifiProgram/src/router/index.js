@@ -16,7 +16,7 @@ export default new Router({
                   name: 'main',
                   component: Main,
                   meta: {
-                  keepAlive: false // 不需要被缓存
+                        keepAlive: false // 不需要被缓存
                   }
 		}, {
                   path: '/login',
